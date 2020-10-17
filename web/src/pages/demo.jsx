@@ -1,30 +1,41 @@
-import React, { useState } from "react"
+import React from "react"
 import { Link } from "gatsby"
 import tw from "tailwind.macro"
 import { connect } from "react-redux"
-import { Button, Input } from "../components/common"
+import styled from "@emotion/styled"
+import { Button } from "../components/common"
 import Layout from "../components/layout/layout"
 import Image from "../components/layout/image"
 import SEO from "../components/layout/seo"
 import { testButton } from "../actions"
 
-const IndexPage = ({ test, testButton }) => {
-  const [formValue, setFormValue] = useState({
-    name: "",
-  })
+const CustomButton1 = styled.button`
+  ${tw`block bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2 mb-2`}
+`
 
-  const onChange = e => {
-    setFormValue({
-      ...formValue,
-      [e.target.name]: e.target.value,
-    })
-  }
+const CustomButton = styled.button`
+  ${tw`block text-white font-bold py-2 px-4 rounded mt-2 mb-2`}
+  ${props =>
+    props.primary
+      ? tw`bg-purple-600 hover:bg-purple-700`
+      : tw`bg-black hover:bg-gray-700`}
+`
 
-  const onSubmit = e => {
-    e.preventDefault()
-    console.log(formValue)
-  }
+const CustomButton2 = styled.button`
+  ${tw`block text-white font-bold py-2 px-4 rounded mt-2 mb-2`}
+  ${({ primary, secondary }) => {
+    switch (true) {
+      case primary:
+        return tw`bg-purple-600 hover:bg-purple-700`
+      case secondary:
+        return tw`bg-gray-600 hover:bg-gray-700`
+      default:
+        tw`bg-blue-600 hover:bg-blue-700`
+    }
+  }}
+`
 
+const Demo = ({ test, testButton }) => {
   return (
     <Layout>
       <SEO title="Home" />
@@ -33,13 +44,10 @@ const IndexPage = ({ test, testButton }) => {
       >
         This is Soumya
       </h4>
-      <form className="form" onSubmit={onSubmit}>
-        <Input name="name" value={formValue.name} onChange={onChange} />
-        <Button primary loading>
-          Submit
-        </Button>
-      </form>
-
+      <CustomButton>Hello</CustomButton>
+      <CustomButton1>Hello</CustomButton1>
+      <CustomButton2 secondary>Heyy</CustomButton2>
+      <Button>Hey</Button>
       <h4 className="to-orange-500">Hello World</h4>
       <button
         css={tw`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`}
@@ -66,4 +74,4 @@ const mapStateToProps = state => ({
   test: state.test,
 })
 
-export default connect(mapStateToProps, { testButton })(IndexPage)
+export default connect(mapStateToProps, { testButton })(Demo)
